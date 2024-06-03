@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import authService from './authService.ts';
 import { IAuthContext, IAuthProviderProps, ICurrentUser } from './types.ts';
+import { toast } from 'react-toastify';
 
 const defaultAuthContext: IAuthContext = {
   currentUser: null,
@@ -24,8 +25,12 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const user = await authService.login(email, password);
-    setCurrentUser(user);
+    try {
+      const user = await authService.login(email, password);
+      setCurrentUser(user);
+    } catch (err) {
+      throw new Error(err.response.data.message);
+    }
   };
 
   const logout = () => {

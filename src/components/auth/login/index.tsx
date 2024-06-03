@@ -5,15 +5,20 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ILoginFields, LoginUserSchema } from './types.ts';
 import { Box, Button, Input, Typography } from '@mui/joy';
 import Fieldset from '../../forms/Fieldset.tsx';
+import { toast } from 'react-toastify';
 
 const Login = () => {
-  const navigate = useNavigate();
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogin = async (data: ILoginFields) => {
-    const { email, password } = data;
-    await login(email, password);
-    navigate('/');
+    try {
+      const { email, password } = data;
+      await login(email, password);
+      navigate('/');
+    } catch (err) {
+      toast.error(err.message);
+    }
   };
 
   const {

@@ -20,12 +20,11 @@ const Register = () => {
 
   const handleRegister = async (data: IRegisterFields) => {
     try {
-      const response = await useApi('post', '/register', data);
+      await useApi('post', '/register', data);
       toast.success('Successfully registered, now you can log in');
-      console.log(response);
       navigate('/');
     } catch (err) {
-      console.log(err);
+      toast.error(err.response.data.message);
     }
   };
 

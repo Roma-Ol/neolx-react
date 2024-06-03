@@ -102,7 +102,7 @@ const User: React.FC<IUserProps> = ({ user, refreshUsers }) => {
         handleClose={toggleEdit}
         form={
           <UserEditForm
-            values={{ name, phone, email, isVerified }}
+            values={{ name, phone, role, email, isVerified }}
             entityId={_id}
             handleSave={handleUpdate}
           />

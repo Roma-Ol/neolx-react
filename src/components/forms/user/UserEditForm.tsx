@@ -1,4 +1,4 @@
-import { Box, Button, Input } from '@mui/joy';
+import { Box, Button, Input, Select, Option } from '@mui/joy';
 import { IUserEditFields } from '../../users/type.ts';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,7 +9,7 @@ import { useApi } from '../../../services/API';
 import { toast } from 'react-toastify';
 
 const UserEditForm: React.FC<IUserEditFormProps> = ({ values, entityId, handleSave }) => {
-  const { name, email, phone, isVerified } = values;
+  const { name, email, phone, role, isVerified } = values;
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {
@@ -20,6 +20,7 @@ const UserEditForm: React.FC<IUserEditFormProps> = ({ values, entityId, handleSa
     defaultValues: {
       name,
       email,
+      role,
       phone,
       isVerified,
     },
@@ -28,9 +29,9 @@ const UserEditForm: React.FC<IUserEditFormProps> = ({ values, entityId, handleSa
 
   const onFormSubmit = async (data: IUserEditFields) => {
     setIsLoading(true);
-    const { name, email, phone } = data;
+    const { name, email, role, phone } = data;
 
-    const body = { name, email, phone };
+    const body = { name, email, phone, role };
 
     try {
       await useApi('put', `/user/${entityId}`, body, { requiresAuth: true });
@@ -101,6 +102,28 @@ const UserEditForm: React.FC<IUserEditFormProps> = ({ values, entityId, handleSa
                 value={value}
                 error={!!errors.phone}
               />
+            }
+          />
+        )}
+      />
+
+      {/* User Role. */}
+      <Controller
+        name='role'
+        control={control}
+        render={({ field: { value, onChange } }) => (
+          <Fieldset
+            label='Role'
+            error={errors.role && errors.role.message}
+            inputComponent={
+              <Select
+                placeholder='User role'
+                value={value}
+                onChange={(_e, newValue) => onChange(newValue)}
+              >
+                <Option value='admin'>Admin</Option>
+                <Option value='manager'>Manager</Option>
+              </Select>
             }
           />
         )}

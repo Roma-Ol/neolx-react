@@ -22,5 +22,6 @@ export interface IUserEditFields {
   name: string;
   email: string;
   phone: string;
+  role: string;
   isVerified: boolean;
 }
